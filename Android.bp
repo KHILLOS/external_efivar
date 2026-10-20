@@ -1,0 +1,87 @@
+package {
+    default_applicable_licenses: ["external_efivar_license"],
+}
+
+license {
+    name: "external_efivar_license",
+    license_kinds: ["SPDX-license-identifier-LGPL-2.1-only"],
+    license_text: ["COPYING"],
+}
+
+cc_binary_host {
+    name: "makeguids",
+    srcs: ["guid.c", "util.c"],
+    cflags: [
+        "-DEFIVAR_BUILD_ENVIRONMENT",
+        "-Wno-typedef-redefinition",
+    ],
+    ldflags: ["-ldl"],
+    vendor_available: true,
+}
+
+genrule {
+    name: "efivar_gen_guids",
+    cmd: "echo 'Generating efivar-guids.h and guid-symbols.c' && " +
+         "$(location makeguids) $(in) $(outDir)/efivar-guids.h $(outDir)/guid-symbols.c",
+    srcs: ["guids.txt"],
+    out: ["efivar/efivar-guids.h", "guid-symbols.c"],
+    tools: ["makeguids"],
+}
+
+cc_library_static {
+    name: "libefivar",
+    srcs: [
+        // libefiboot sources
+        "crc32.c",
+        "creator.c",
+        "disk.c",
+        "gpt.c",
+        "loadopt.c",
+        "path-helpers.c",
+        "linux-acpi-root.c",
+        "linux-acpi.c",
+        "linux-ata.c",
+        "linux-emmc.c",
+        "linux-i2o.c",
+        "linux-md.c",
+        "linux-nvme.c",
+        "linux-pci-root.c",
+        "linux-pci.c",
+        "linux-pmem.c",
+        "linux-sas.c",
+        "linux-sata.c",
+        "linux-scsi.c",
+        "linux-soc-root.c",
+        "linux-virtblk.c",
+        "linux-virtual-root.c",
+        "linux.c",
+        // libefivar sources
+        "dp.c",
+        "dp-acpi.c",
+        "dp-hw.c",
+        "dp-media.c",
+        "dp-message.c",
+        "efivarfs.c",
+        "error.c",
+        "export.c",
+        "guid.c",
+        "lib.c",
+        "vars.c",
+        // libefisec sources
+        "sec.c",
+        // Android portability shims
+        "portable_fopencookie.c",
+    ],
+    cflags: [
+        "-D_FILE_OFFSET_BITS=64",
+        "-D_GNU_SOURCE",
+        "-std=gnu11",
+        "-Wno-missing-field-initializers",
+    ],
+    export_include_dirs: [
+        "include",
+        ".",
+    ],
+    generated_sources: ["efivar_gen_guids"],
+    vendor_available: true,
+}
