@@ -1,4 +1,7 @@
 /* Isaac Turner 29 April 2014 Public Domain */
+/*
+ * SPDX-License-Identifier: LGPL-2.1-only
+ */
 #ifndef SORT_R_H_
 #define SORT_R_H_
 

@@ -10,6 +10,9 @@
  *	for further information.
  *
  */
+/*
+ * SPDX-License-Identifier: LGPL-2.1-only
+ */
 
 #define _LARGEFILE64_SOURCE 1
 #include <pthread.h>

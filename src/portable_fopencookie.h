@@ -10,6 +10,9 @@
  *	for further information.
  *
  */
+/*
+ * SPDX-License-Identifier: LGPL-2.1-only
+ */
 
 #ifndef PORTABLE_FOPENCOOKIE_H
 #define PORTABLE_FOPENCOOKIE_H
